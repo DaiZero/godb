@@ -2,17 +2,21 @@ package router
 
 import (
 	v1 "dzero/godb/api"
+	_ "dzero/godb/docs"
 	"dzero/godb/middleware"
 	"dzero/godb/util"
 	"fmt"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"net/http"
 )
 
 func InitRouter() *gin.Engine {
 
 	router := gin.Default()
-	gin.New()
+	url := ginSwagger.URL("http://localhost:8080/swagger/doc.json") // The url pointing to API definition
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, url))
 
 	router.POST("/api/auth/register", func(ctx *gin.Context) {
 		//ctx.JSON(200, gin.H{
@@ -54,7 +58,7 @@ func InitRouter() *gin.Engine {
 	apiRouter := router.Group("/api/v1")
 	apiRouter.Use(middleware.JWTAuth())
 	{
-		apiRouter.GET("user",v1.GetUserInfo)
+		apiRouter.GET("user", v1.GetUserInfo)
 	}
 	return router
 }

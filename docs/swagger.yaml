@@ -1,0 +1,32 @@
+definitions:
+  model.User:
+    properties:
+      name:
+        type: string
+      password:
+        type: string
+      telephone:
+        type: integer
+    type: object
+info:
+  contact: {}
+  license: {}
+paths:
+  /api/v1/user:
+    post:
+      consumes:
+      - application/json
+      description: GetUserInfo
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/model.User'
+      security:
+      - ApiKeyAuth: []
+      summary: 获取用户信息
+      tags:
+      - User
+swagger: "2.0"
