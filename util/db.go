@@ -30,3 +30,13 @@ func InitDB() *gorm.DB {
 	defer db.Close()
 	return db
 }
+
+func GetMySqlDB(dbc model.DbConnection) *gorm.DB {
+	dbConnectionStr := dbc.UserName + ":" + dbc.UserPassword + "@(" + dbc.DbHost + ":"
+	db, err := gorm.Open("mysql", dbConnectionStr)
+	if err != nil {
+		panic("failed to connect database")
+	}
+	defer db.Close()
+	return db
+}
