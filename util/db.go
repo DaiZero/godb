@@ -8,18 +8,24 @@ import (
 )
 
 func InitDB() *gorm.DB {
-	db, err := gorm.Open("mysql", "root:NP123456@(localhost:3306)/test?charset=utf8mb4&parseTime=True&loc=Local")
+	db, err := gorm.Open("mysql", "root:NP123456@(192.168.1.18:30010)/godb?charset=utf8mb4&parseTime=True&loc=Local")
 	//db, err := gorm.Open("sqlite3", "./tmp/gorm.db")
 	if err != nil {
 		panic("failed to connect database")
 	}
 	db.SingularTable(true)
-	db.AutoMigrate(&model.User{}, &model.Database{})
+	db.AutoMigrate(&model.SysUser{},
+		&model.DbSchema{},
+		&model.DbConnection{},
+		&model.DbTable{},
+		&model.DbView{},
+		&model.DbFunction{},
+		&model.DbVersion{})
 
-	var user model.User
+	var user model.SysUser
 	db.First(&user, 1) // 查询id为1的User
 	if len(user.Name) == 0 {
-		db.Create(&model.User{Name: "admin", Password: "admin", Telephone: 123456788})
+		db.Create(&model.SysUser{Name: "admin", Password: "admin", Telephone: 123456788})
 	}
 	defer db.Close()
 	return db
